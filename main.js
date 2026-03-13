@@ -1,12 +1,38 @@
 const fs = require("fs");
 
-// ============================================================
-// Function 1: getShiftDuration(startTime, endTime)
-// startTime: (typeof string) formatted as hh:mm:ss am or hh:mm:ss pm
-// endTime: (typeof string) formatted as hh:mm:ss am or hh:mm:ss pm
-// Returns: string formatted as h:mm:ss
-// ============================================================
+
 function getShiftDuration(startTime, endTime) {
+
+    function convertToSeconds(timeStr) {
+        let [time, modifier] = timeStr.split(" ");
+        let [hours, minutes, seconds] = time.split(":").map(Number);
+
+        if (modifier.toLowerCase() === "pm" && hours !== 12) {
+            hours += 12;
+        }
+
+        if (modifier.toLowerCase() === "am" && hours === 12) {
+            hours = 0;
+        }
+
+        return hours * 3600 + minutes * 60 + seconds;
+    }
+
+    let startSeconds = convertToSeconds(startTime);
+    let endSeconds = convertToSeconds(endTime);
+
+    let diff = endSeconds - startSeconds;
+
+    let h = Math.floor(diff / 3600);
+    let m = Math.floor((diff % 3600) / 60);
+    let s = diff % 60;
+
+    return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function getShiftDuration(startTime, endTime) {
+    
+
     // TODO: Implement this function
 }
 
